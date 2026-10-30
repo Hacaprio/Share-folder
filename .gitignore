@@ -1,0 +1,44 @@
+# OS / editors
+.DS_Store
+._*
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Secrets / local configuration
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+credentials.json
+service-account*.json
+
+# Dependencies / caches
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.npm/
+
+# Generated outputs / local runtime data
+dist/
+build/
+coverage/
+*.log
+logs/
+tmp/
+temp/
+runtime-data/
+*.sqlite
+*.sqlite3
+*.db
+
+# Keep dependency lock files tracked.
