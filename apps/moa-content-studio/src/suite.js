@@ -1,5 +1,5 @@
-import {$,toolShell,status,health,activeJobs,draft} from './tools/common.js';
-import {getLastProject} from './storage.js';
+import {$,status,activeJobs} from './tools/common.js';
+import {icon,toolIcons} from './icons.js';
 export const TOOLS=[
  ['이미지·디자인','image','이미지 작업실','▧','일괄 편집 · 자동 저장 · 프로젝트'],
  ['이미지·디자인','template','템플릿 캔버스','▦','레이어 · 여러 페이지 · 애니메이션'],
@@ -26,22 +26,32 @@ export const TOOLS=[
  ['판매자 계산기','rocket-growth-policy','로켓그로스 정책','≡','공식 출처 · 내 확인 기록'],
  ['글쓰기','blog','블로그 본문 정리','¶','줄바꿈 · 해시태그 · TXT']
 ];
-const legacy=$('.shell>main');legacy.id='image-workspace';const view=document.createElement('main');view.id='suite-view';legacy.before(view);const toolStatus=document.createElement('div');toolStatus.className='save-indicator';toolStatus.textContent='이 기기에서 처리';toolStatus.id='tool-save-state';$('.topbar').append(toolStatus);const toast=document.createElement('div');toast.id='suite-toast';toast.hidden=true;toast.role='status';toast.setAttribute('aria-live','polite');document.body.append(toast);
-const sidebar=$('.sidebar'),nav=document.createElement('nav');nav.className='suite-nav';nav.setAttribute('aria-label','모든 도구');let category;
-const all=document.createElement('button');all.textContent='▦ 모든 도구';all.dataset.tool='home';all.onclick=()=>location.hash='home';nav.append(all);
-for(const [group,id,title,icon]of TOOLS){if(group!==category){const heading=document.createElement('div');heading.className='suite-category';heading.textContent=group;nav.append(heading);category=group;}const b=document.createElement('button');b.textContent=icon+' '+title;b.dataset.tool=id;b.onclick=()=>location.hash=id;nav.append(b);}$('.workflow-label').before(nav);
-const mobile=document.createElement('select');mobile.className='suite-mobile-nav';mobile.setAttribute('aria-label','도구 선택');mobile.append(new Option('모든 도구','home'),...TOOLS.map(([,id,title])=>new Option(title,id)),new Option('이미지 정밀 편집','editor'));mobile.onchange=()=>location.hash=mobile.value;$('.topbar').after(mobile);
-$('.brand').href='#home';$('#workspace-tab').onclick=()=>location.hash='image';$('.local-note p').innerHTML='브라우저 또는 이 컴퓨터의<br>로컬 엔진에서 처리합니다.';$('.local-note strong').textContent='외부 업로드 없이';$('.sidebar-bottom small').textContent='모아 전체 작업실 · v2.0';const footer=$('#image-workspace footer');if(footer)footer.lastElementChild.textContent='브라우저·로컬 엔진 처리 · 원본 보존';
-const editorLink=document.createElement('button');editorLink.className='button small white';editorLink.textContent='정밀 편집 ↗';editorLink.onclick=()=>location.hash='editor';$('.asset-actions',legacy).prepend(editorLink);
-let cleanup,routeCounter=0,currentRoute='home';
-async function home(){toolShell(view,'반복하는 일, 모아에서 끝내세요.','사진부터 문서·영상·판매 계산까지. 파일은 이 기기에 두고, 필요한 도구를 연결하세요.',`<section class="tool-card"><div class="tool-row"><span class="engine-pill" id="engine-state">로컬 엔진 연결 확인 중</span><span class="tool-badge">24개 도구</span><a class="text-button" href="/completion-report.html" target="_blank" rel="noopener">사용 범위·검증 보고 ↗</a><span class="tool-badge">프로젝트·캔버스 자동 복구</span><button id="home-continue" class="button white">이미지 작업 이어하기 →</button></div><p class="tool-muted" id="home-project"></p></section><div id="home-tool-groups"></div>`);$('#home-continue',view).onclick=()=>location.hash='image';let category;const host=$('#home-tool-groups',view);let cards;for(const [group,id,title,icon,desc]of TOOLS){if(group!==category){const h=document.createElement('h2');h.className='suite-section-label';h.textContent=group;cards=document.createElement('div');cards.className='suite-cards';host.append(h,cards);category=group;}const b=document.createElement('button');b.className='suite-tool-card';const symbol=document.createElement('span');symbol.className='tool-icon';symbol.textContent=icon;const name=document.createElement('strong');name.textContent=title;const p=document.createElement('p');p.textContent=desc;b.append(symbol,name,p);b.onclick=()=>location.hash=id;cards.append(b);}
- try{const p=await getLastProject();if(p&&$('#home-project',view))$('#home-project',view).textContent=`최근 이미지 프로젝트: ${p.name} · ${p.assets.length}개 파일`;}catch{}
- try{const h=await health();if($('#engine-state',view))$('#engine-state',view).textContent=`로컬 엔진 연결됨 · AI ${h.backgroundModel?'준비됨':'모델 설치 필요'} · OCR ${h.ocrModels?'준비됨':'설치 필요'}`;}catch(e){if($('#engine-state',view))$('#engine-state',view).textContent=e.message;}
+const legacy=$('.shell>main');legacy.id='image-workspace';
+const view=document.createElement('main');view.id='suite-view';legacy.before(view);
+const toolStatus=document.createElement('div');toolStatus.className='save-indicator';toolStatus.textContent='이 기기에서 처리';toolStatus.id='tool-save-state';$('.topbar').append(toolStatus);
+const toast=document.createElement('div');toast.id='suite-toast';toast.hidden=true;toast.role='status';toast.setAttribute('aria-live','polite');document.body.append(toast);
+const sidebar=$('.sidebar'),nav=document.createElement('nav');nav.className='suite-nav';nav.setAttribute('aria-label','모든 도구');
+const all=document.createElement('button');all.className='nav-home';all.innerHTML=icon('layout-grid')+'<span>모든 도구</span><span class="nav-count">24</span>';all.dataset.tool='home';all.onclick=()=>location.hash='home';nav.append(all);
+const find=document.createElement('button');find.className='nav-search';find.innerHTML=icon('search')+'<span>도구 검색</span><kbd>'+(/Mac|iPhone|iPad/.test(navigator.platform)?'⌘ K':'Ctrl K')+'</kbd>';find.onclick=()=>{const input=$('#tool-search');if(input){input.focus();input.scrollIntoView({block:'center',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});}};nav.append(find);
+for(const group of [...new Set(TOOLS.map(t=>t[0]))]){
+ const details=document.createElement('details');details.className='nav-group';details.open=group===TOOLS[0][0];
+ const summary=document.createElement('summary');summary.innerHTML='<span>'+group+'</span><span class="nav-group-count">'+TOOLS.filter(t=>t[0]===group).length+'</span>'+icon('chevron-down');details.append(summary);
+ const list=document.createElement('div');
+ for(const [,id,title]of TOOLS.filter(t=>t[0]===group)){const b=document.createElement('button');b.innerHTML=icon(toolIcons[id])+'<span>'+title+'</span>';b.dataset.tool=id;b.onclick=()=>location.hash=id;list.append(b);}details.append(list);nav.append(details);
 }
+$('.workflow-label').before(nav);
+const mobile=document.createElement('select');mobile.className='suite-mobile-nav';mobile.setAttribute('aria-label','도구 선택');mobile.append(new Option('모든 도구','home'),...TOOLS.map(([,id,title])=>new Option(title,id)),new Option('이미지 정밀 편집','editor'));mobile.onchange=()=>location.hash=mobile.value;$('.topbar').after(mobile);
+$('.brand').href='#home';$('.brand').setAttribute('aria-label','모아 홈');$('.brand').innerHTML='<span class="brand-wordmark">moa<span>.</span></span><small>YOUR CREATIVE WORKSPACE</small>';
+const mobileBrand=document.createElement('a');mobileBrand.className='topbar-mobile-brand';mobileBrand.href='#home';mobileBrand.textContent='moa.';mobileBrand.setAttribute('aria-label','모아 홈');$('.topbar').prepend(mobileBrand);
+$('#workspace-tab').onclick=()=>location.hash='image';$('.local-note p').innerHTML='파일은 브라우저나 이 컴퓨터에서<br>처리하고 원본은 그대로 보존해요.';$('.local-note strong').textContent='내 파일은 내 기기에';$('.sidebar-bottom small').textContent='모아 콘텐츠 스튜디오 · v2.1';
+const footer=$('#image-workspace footer');if(footer)footer.lastElementChild.textContent='내 파일은 내 기기에 · 원본 보존';
+const editorLink=document.createElement('button');editorLink.className='button small white';editorLink.innerHTML='정밀 편집 '+icon('arrow-up-right');editorLink.onclick=()=>location.hash='editor';$('.asset-actions',legacy).prepend(editorLink);
+let cleanup,routeCounter=0,currentRoute='home';
 async function route(){let id;try{id=decodeURIComponent(location.hash.slice(1))||'home';}catch{id='home';}if(!TOOLS.some(t=>t[1]===id)&&!['home','editor'].includes(id))id='home';if(activeJobs||!$('#cancel').hidden){if(id!==currentRoute){status('진행 중인 작업이 있습니다. 완료하거나 취소한 뒤 이동하세요.');history.replaceState(null,'','#'+currentRoute);}return;}
- const version=++routeCounter;if(cleanup){const dispose=cleanup;cleanup=null;await dispose();}if(version!==routeCounter)return;currentRoute=id;document.body.dataset.tool=id;delete document.body.dataset.toolReady;for(const b of nav.querySelectorAll('[data-tool]'))b.classList.toggle('selected',b.dataset.tool===id);mobile.value=id;$('.breadcrumb strong').textContent=id==='home'?'모든 도구':TOOLS.find(t=>t[1]===id)?.[2]||'이미지 정밀 편집';legacy.hidden=id!=='image';view.hidden=id==='image';$('#save-state').hidden=id!=='image';toolStatus.hidden=id==='image';window.scrollTo({top:0});if(id==='image'){document.body.dataset.toolReady=id;return;}
+ const version=++routeCounter;if(cleanup){const dispose=cleanup;cleanup=null;await dispose();}if(version!==routeCounter)return;currentRoute=id;document.body.dataset.tool=id;delete document.body.dataset.toolReady;for(const b of nav.querySelectorAll('[data-tool]')){const selected=b.dataset.tool===id;b.classList.toggle('selected',selected);if(selected){b.setAttribute('aria-current','page');const group=b.closest('details');if(group)group.open=true;}else b.removeAttribute('aria-current');}mobile.value=id;$('.breadcrumb strong').textContent=id==='home'?'모든 도구':TOOLS.find(t=>t[1]===id)?.[2]||'이미지 정밀 편집';legacy.hidden=id!=='image';view.hidden=id==='image';$('#save-state').hidden=id!=='image';toolStatus.hidden=id==='image';window.scrollTo({top:0});if(id==='image'){document.body.dataset.toolReady=id;return;}
  view.replaceChildren();const host=document.createElement('div');view.append(host);let result;
- try{if(id==='home'){await home();if(version===routeCounter)document.body.dataset.toolReady=id;return;}if(id==='template')result=await(await import('./tools/canvas.js')).mount(host);
+ try{if(id==='home')result=await(await import('./home.js')).mountHome(host,TOOLS);
+ else if(id==='template')result=await(await import('./tools/canvas.js')).mount(host);
  else if(['background','watermark-remove','mosaic','split','editor'].includes(id))result=await(await import('./tools/images.js')).mount(host,id);
  else if(['qr','rename','signature'].includes(id)){const mod=await import('./tools/images.js');result=await mod[{qr:'mountQR',rename:'mountRename',signature:'mountSignature'}[id]](host);}
  else if(id==='pdf-tools')result=await(await import('./tools/documents.js')).mountPDF(host);

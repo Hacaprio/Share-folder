@@ -11,3 +11,6 @@ Moa's application source is newly authored. It uses separately licensed librarie
 - imageio-ffmpeg: https://github.com/imageio/imageio-ffmpeg . Its separately installed FFmpeg binary reports GNU GPL v2 or later for the build used during validation. The binary is not redistributed in Moa's source ZIP. Source/build information is supplied by the imageio-ffmpeg / FFmpeg projects.
 - Optional Poppler: https://poppler.freedesktop.org/ . Uses an existing installation when available; otherwise the app uses separately installed PDFium bindings.
 - Marketplace reference data: official fee/policy links are shown in the app. The reference category table was observed from https://tools.kdpmkt.com/ on 2026-10-31. Application code from that site is not included in Moa's runtime.
+
+- Lucide Static 0.468.0 icons: https://github.com/lucide-icons/lucide ; ISC license included in `licenses/Lucide-ISC.txt`. Only selected icon paths are bundled locally; there are no runtime icon requests.
+- `assets/studio-cup.jpg` is the generated Moa cup illustration used by the built-in demo, with no EXIF metadata.
