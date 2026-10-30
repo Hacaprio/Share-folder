@@ -8,7 +8,7 @@
 
 ```sh
 git clone https://github.com/Hacaprio/Share-folder.git
-cd Share-folder/app/moa-content-studio
+cd Share-folder/apps/moa-content-studio
 python3 setup.py
 .venv/bin/python server.py --port 4173
 ```
