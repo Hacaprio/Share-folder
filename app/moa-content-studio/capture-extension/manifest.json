@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "모아 전체 페이지 캡처",
+  "description": "현재 탭의 전체 페이지를 이 기기에서 PNG 또는 PDF로 저장합니다.",
+  "version": "1.0.0",
+  "permissions": [
+    "activeTab",
+    "debugger",
+    "downloads"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "모아 전체 캡처"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}

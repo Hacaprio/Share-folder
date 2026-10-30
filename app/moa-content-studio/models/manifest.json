@@ -1,0 +1,26 @@
+[
+  {
+    "name": "u2netp.onnx",
+    "source": "https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2netp.onnx",
+    "bytes": 4574861,
+    "sha256": "309c8469258dda742793dce0ebea8e6dd393174f89934733ecc8b14c76f4ddd8"
+  },
+  {
+    "name": "eng.traineddata.gz",
+    "source": "https://tessdata.projectnaptha.com/4.0.0_fast/eng.traineddata.gz",
+    "bytes": 1984273,
+    "sha256": "18c1ac52b75e35d44735fb6c2a60acfaf23033524653200738e98f0243edb75b"
+  },
+  {
+    "name": "kor.traineddata.gz",
+    "source": "https://tessdata.projectnaptha.com/4.0.0_fast/kor.traineddata.gz",
+    "bytes": 1114590,
+    "sha256": "aae6df1bbd206053b366b0b0f00e2211637d0923e8c3c64a0cbc9edaf61a5896"
+  },
+  {
+    "name": "NanumGothic-Regular.ttf",
+    "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/nanumgothic/NanumGothic-Regular.ttf",
+    "bytes": 2054744,
+    "sha256": "76f45ef4a6bcff344c837c95a7dcc26e017e38b5846d5ae0cdcb5b86be2e2d31"
+  }
+]

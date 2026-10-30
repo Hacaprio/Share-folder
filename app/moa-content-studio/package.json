@@ -1,0 +1,15 @@
+{
+  "name": "moa-content-studio",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Local-first image, document, video and seller toolkit",
+  "scripts": {
+    "start": ".venv/bin/python server.py --port 4173",
+    "test": "node --test tests/core.test.js tests/zip.test.js tests/fees.test.js tests/capture-extension.test.js tests/canvas-model.test.js",
+    "test:backend": ".venv/bin/python tests/full_backend_test.py"
+  },
+  "dependencies": {
+    "tesseract.js": "6.0.1"
+  }
+}

@@ -1,0 +1,2 @@
+const button=document.querySelector('#capture'),status=document.querySelector('#status');
+button.onclick=async()=>{button.disabled=true;status.textContent='전체 페이지를 준비하고 있습니다…';try{const result=await chrome.runtime.sendMessage({type:'moa-capture',format:document.querySelector('#format').value});if(!result?.ok)throw Error(result?.error||'캡처하지 못했습니다.');status.textContent='저장 요청을 보냈습니다.';}catch(error){status.textContent=error.message;}finally{button.disabled=false;}};
